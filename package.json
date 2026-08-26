@@ -1,0 +1,12 @@
+{
+  "name": "walking-temple-app",
+  "version": "1.0.0",
+  "description": "걸어 다니는 교회 - 중고등부 셀프 스터디 시뮬레이션 웹앱",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
