@@ -1,0 +1,1065 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css');
+
+:root {
+  /* 청량하고 시원한 여름 픽셀 컬러 팔레트 */
+  --bg-summer-sky: #dcf5fd;
+  --bg-dot-color: #92e0f2;
+  --ink: #091e3a;
+  --ink-soft: #244166;
+  --white: #ffffff;
+  --cream-box: #f4fdff;
+
+  /* 여름 핀테크/모바일 뱅킹 포인트 컬러 */
+  --summer-blue: #0096eb;
+  --summer-blue-light: #bde8ff;
+  --summer-blue-dark: #006eb3;
+  --summer-cyan: #00d2f0;
+  --summer-cyan-light: #d1f7fd;
+  --summer-mint: #05dfb7;
+  --summer-mint-light: #ccfbf1;
+  --summer-yellow: #ffdf40;
+  --summer-yellow-light: #fff59e;
+  --summer-coral: #ff6584;
+  --summer-coral-light: #ffe5ec;
+
+  /* 픽셀 외곽선 및 테두리 (딥 오션 네이비) */
+  --pixel-border: #091e3a;
+
+  /* 폰트 */
+  --pixel-title-font: 'Press Start 2P', 'Galmuri11', 'Galmuri9', monospace;
+  --pixel-body-font: 'Galmuri11', 'Galmuri9', 'Press Start 2P', -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace, sans-serif;
+
+  /* 픽셀 3D 그림자 */
+  --pixel-shadow-sm: 2px 2px 0px var(--pixel-border);
+  --pixel-shadow: 4px 4px 0px var(--pixel-border);
+  --pixel-shadow-lg: 6px 6px 0px var(--pixel-border);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--summer-cyan-light);
+  color: var(--ink);
+}
+
+/* 픽셀 커스텀 스크롤바 (시원한 민트 & 블루) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-summer-sky);
+  border-left: 2px solid var(--pixel-border);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--summer-cyan);
+  border: 2px solid var(--pixel-border);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--summer-blue);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  /* 시원하고 청량한 쿨 썸머 스카이 블루 배경 + 레트로 픽셀 도트 그리드 */
+  background-color: var(--bg-summer-sky);
+  background-image: 
+    radial-gradient(var(--bg-dot-color) 2px, transparent 2px),
+    radial-gradient(var(--bg-dot-color) 2px, var(--bg-summer-sky) 2px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+  color: var(--ink);
+  font-family: var(--pixel-body-font);
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 60px;
+  image-rendering: pixelated;
+  letter-spacing: -0.01em;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* ---------- 레트로 헤더 (마스트헤드) ---------- */
+.masthead {
+  text-align: center;
+  margin-bottom: 22px;
+  position: relative;
+}
+
+.arch-mark {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 10px;
+  display: block;
+  filter: drop-shadow(3px 3px 0px var(--pixel-border));
+  animation: float-head 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes float-head {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-6px);
+  }
+}
+
+.masthead h1 {
+  font-family: var(--pixel-title-font);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 8px;
+  text-shadow: 2px 2px 0px #ffffff, 4px 4px 0px var(--summer-blue-light);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.masthead p {
+  display: inline-block;
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--summer-yellow);
+  border: 2px solid var(--pixel-border);
+  box-shadow: var(--pixel-shadow-sm);
+  padding: 4px 12px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+
+/* ---------- 픽셀 디딤돌 진행 표시 (시그니처) ---------- */
+.stepping-path {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0 24px;
+}
+
+.stone {
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border: 2px solid var(--pixel-border);
+  box-shadow: var(--pixel-shadow-sm);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.stone.done {
+  background: var(--summer-cyan);
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.stone.current {
+  width: 22px;
+  height: 22px;
+  background: var(--summer-blue);
+  box-shadow: 3px 3px 0px var(--pixel-border);
+  animation: pixel-jump 0.8s infinite alternate;
+}
+
+@keyframes pixel-jump {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+.stone-line {
+  width: 14px;
+  height: 4px;
+  background: var(--pixel-border);
+}
+
+/* ---------- 요일 진행 트래커 (모바일 뱅킹 주간 퀘스트 트래커) ---------- */
+.weekday-track {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.weekday-dot {
+  flex: 1;
+  text-align: center;
+  padding: 8px 2px;
+  border: 2.5px solid var(--pixel-border);
+  border-radius: 4px;
+  background: var(--white);
+  font-family: var(--pixel-title-font);
+  font-size: 0.65rem;
+  color: var(--ink-soft);
+  box-shadow: 2px 2px 0px rgba(9, 30, 58, 0.15);
+  transition: all 0.15s ease;
+}
+
+.weekday-dot.done {
+  background: var(--summer-cyan-light);
+  border-color: var(--pixel-border);
+  color: var(--summer-blue-dark);
+  font-weight: 700;
+}
+
+.weekday-dot.current {
+  background: var(--summer-yellow);
+  color: var(--ink);
+  font-weight: 700;
+  transform: translateY(-2px);
+  box-shadow: var(--pixel-shadow-sm);
+  animation: pixel-jump 0.8s infinite alternate;
+}
+
+/* ---------- 메인 픽셀 카드 ---------- */
+.card {
+  background: var(--white);
+  color: var(--ink);
+  border: 3.5px solid var(--pixel-border);
+  border-radius: 6px;
+  padding: 26px 22px 24px;
+  box-shadow: var(--pixel-shadow-lg);
+  animation: pixel-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+@keyframes pixel-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 레트로 퀘스트 / 핀테크 뱃지 (EYEBROW) */
+.eyebrow {
+  display: inline-block;
+  font-family: var(--pixel-title-font);
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--summer-cyan);
+  color: var(--ink) !important;
+  border: 2px solid var(--pixel-border);
+  box-shadow: 2px 2px 0px var(--pixel-border);
+  padding: 4px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.card h2 {
+  font-family: var(--pixel-title-font);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 16px;
+  word-break: keep-all;
+}
+
+.scene-text {
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: var(--ink);
+  margin-bottom: 20px;
+  background: var(--summer-cyan-light);
+  border: 2px dashed var(--summer-cyan);
+  padding: 14px 16px;
+  border-radius: 6px;
+  word-break: keep-all;
+}
+
+/* 성경 말씀 박스 (양피지 / 퀘스트 스크롤 느낌) */
+.verse-box {
+  background: var(--cream-box);
+  border: 2.5px solid var(--pixel-border);
+  box-shadow: inset 2px 2px 0px #ffffff, var(--pixel-shadow-sm);
+  border-radius: 4px;
+  padding: 16px 18px;
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+
+.verse-box b {
+  color: var(--ink);
+  background: var(--summer-yellow-light);
+  padding: 1px 4px;
+  border: 1px solid var(--pixel-border);
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+/* ---------- 🏦 KINGDOM BANK 모바일 뱅킹 계좌 카드 컴포넌트 ---------- */
+.bank-header {
+  background: linear-gradient(135deg, #bde8ff 0%, #d1f7fd 50%, #c8fcea 100%);
+  border: 3.5px solid var(--pixel-border);
+  border-radius: 6px;
+  box-shadow: var(--pixel-shadow-lg);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 모바일 뱅킹 픽셀 카드 워터마크 장식 */
+.bank-header::after {
+  content: "BANK";
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  font-family: var(--pixel-title-font);
+  font-size: 0.65rem;
+  color: rgba(9, 30, 58, 0.2);
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+
+.bank-header .bank-title {
+  font-family: var(--pixel-title-font);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 14px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  word-break: keep-all;
+}
+
+.meter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.meter-row:last-child {
+  margin-bottom: 0;
+}
+
+.meter-label {
+  font-family: var(--pixel-title-font);
+  font-size: 0.72rem;
+  min-width: 74px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.meter-track {
+  flex: 1;
+  height: 16px;
+  background: var(--white);
+  border: 2.5px solid var(--pixel-border);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 1px 1px 0px rgba(0, 0, 0, 0.08);
+}
+
+.meter-fill {
+  height: 100%;
+  transition: width 0.2s ease;
+}
+
+.meter-fill.refill {
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* TIME 게이지: 청량한 썸머 블루/사이언 */
+.meter-fill.time {
+  background: linear-gradient(90deg, #00d2f0, #0096eb);
+}
+
+/* HEART 게이지: 시원한 워터멜론 코랄 핑크 */
+.meter-fill.heart {
+  background: linear-gradient(90deg, #ff8fa3, #ff6584);
+}
+
+.meter-value {
+  min-width: 62px;
+  text-align: right;
+  font-family: var(--pixel-title-font);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ---------- 픽셀 폼 입력 요소 ---------- */
+label.field-label {
+  display: block;
+  font-family: var(--pixel-title-font);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 14px 0 8px;
+  color: var(--ink);
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+  width: 100%;
+  border: 3px solid var(--pixel-border);
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 12px 14px;
+  font-family: var(--pixel-body-font);
+  font-size: 0.95rem;
+  color: var(--ink);
+  box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.06), 2px 2px 0px #ffffff;
+  resize: vertical;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  outline: none;
+  background: #fbfdff;
+  border-color: var(--pixel-border);
+  box-shadow: 3px 3px 0px var(--summer-cyan), inset 2px 2px 0px rgba(0, 0, 0, 0.04);
+}
+
+input[type="text"]::placeholder,
+textarea::placeholder {
+  color: #7b94b5;
+  font-size: 0.88rem;
+}
+
+textarea {
+  min-height: 96px;
+  line-height: 1.65;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-top: 6px;
+  margin-bottom: 18px;
+}
+
+/* ---------- 픽셀 선택지 버튼 (A, B, C) ---------- */
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.choice-btn {
+  text-align: left;
+  border: 3px solid var(--pixel-border);
+  background: var(--white);
+  border-radius: 4px;
+  padding: 14px 16px;
+  font-family: var(--pixel-body-font);
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: var(--pixel-shadow);
+  transition: all 0.12s steps(2);
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  word-break: keep-all;
+}
+
+.choice-btn:hover {
+  background: var(--summer-cyan-light);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--pixel-shadow-lg);
+}
+
+.choice-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.choice-btn.selected {
+  background: var(--summer-yellow);
+  border-color: var(--pixel-border);
+  transform: translate(2px, 2px);
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.choice-btn .choice-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--summer-cyan);
+  color: var(--ink);
+  border: 2px solid var(--pixel-border);
+  box-shadow: 1px 1px 0px var(--pixel-border);
+  border-radius: 2px;
+  font-family: var(--pixel-title-font);
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.choice-btn.selected .choice-letter {
+  background: var(--ink);
+  color: var(--summer-yellow);
+}
+
+/* ---------- 픽셀 체크박스 목록 ---------- */
+.check-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 440px) {
+  .check-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 2.5px solid var(--pixel-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.12s steps(2);
+  background: var(--white);
+  box-shadow: var(--pixel-shadow-sm);
+  user-select: none;
+}
+
+.check-item:hover {
+  background: var(--summer-blue-light);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--pixel-border);
+}
+
+.check-item.checked {
+  border-color: var(--pixel-border);
+  background: var(--summer-yellow);
+  box-shadow: 1px 1px 0px var(--pixel-border);
+  transform: translate(1px, 1px);
+}
+
+.check-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--pixel-border);
+  background: #ffffff;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.check-item input[type="checkbox"]:checked {
+  background: var(--ink);
+}
+
+.check-item input[type="checkbox"]:checked::after {
+  content: "✔";
+  position: absolute;
+  top: -1px;
+  left: 2px;
+  color: var(--summer-yellow);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.check-item span {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ---------- 픽셀 캐릭터 & 시나리오 카드 ---------- */
+.scene-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--summer-blue-light);
+  border: 3px solid var(--pixel-border);
+  box-shadow: var(--pixel-shadow-sm);
+  margin: 0 auto;
+  display: block;
+}
+
+.scene-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--white);
+  border: 3px solid var(--pixel-border);
+  border-radius: 6px;
+  box-shadow: var(--pixel-shadow);
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.scene-card .scene-who {
+  font-family: var(--pixel-title-font);
+  font-size: 0.75rem;
+  color: var(--summer-blue-dark);
+  margin-bottom: 6px;
+  display: inline-block;
+  background: var(--summer-cyan-light);
+  border: 1.5px solid var(--pixel-border);
+  border-radius: 3px;
+  padding: 2px 6px;
+}
+
+.scene-card .scene-desc {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.scene-card .scene-line {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  font-weight: 700;
+  color: var(--ink);
+  background: #f4fdff;
+  border-left: 3.5px solid var(--summer-cyan);
+  padding: 8px 12px;
+  border-radius: 0 4px 4px 0;
+}
+
+/* ---------- 자유시간 활동 선택 리스트 ---------- */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.activity-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  border: 3px solid var(--pixel-border);
+  background: var(--white);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-family: var(--pixel-body-font);
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: var(--pixel-shadow);
+  transition: all 0.1s steps(2);
+}
+
+.activity-btn:hover {
+  background: var(--summer-yellow-light);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--pixel-shadow-lg);
+}
+
+.activity-btn .activity-emoji {
+  font-size: 1.4rem;
+}
+
+/* ---------- 💸 모바일 뱅킹 시간/마음 이체 및 출금 패널 ---------- */
+.give-panel {
+  background: linear-gradient(180deg, var(--summer-cyan-light) 0%, #e0f7fc 100%);
+  border: 3px dashed var(--pixel-border);
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 12px;
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.give-panel .amount-value {
+  font-family: var(--pixel-title-font);
+  font-size: 1.15rem;
+  text-align: center;
+  margin: 12px 0 16px;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--pixel-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+/* 픽셀 커스텀 레인지 슬라이더 (모바일 뱅킹 이체 다이얼) */
+input[type="range"] {
+  width: 100%;
+  height: 12px;
+  accent-color: var(--summer-blue);
+  cursor: pointer;
+  margin: 8px 0;
+}
+
+/* ---------- 픽셀 피드백 박스 (NPC 말풍선 / 이체 완료 영수증 알림) ---------- */
+.feedback-box {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: #f0fdfb;
+  border: 2.5px solid var(--pixel-border);
+  border-left: 6px solid var(--summer-mint);
+  border-radius: 4px;
+  box-shadow: var(--pixel-shadow-sm);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--ink);
+  animation: pixel-pop 0.25s ease;
+  word-break: keep-all;
+}
+
+.feedback-box .feedback-action {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.feedback-box .feedback-dialogue {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 3px solid var(--summer-blue);
+}
+
+.feedback-box .feedback-monologue {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+
+.feedback-box .feedback-reflect {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* ---------- 픽셀 버튼 그룹 & 버튼 스타일 ---------- */
+.btn-row {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  border: 3px solid var(--pixel-border);
+  border-radius: 4px;
+  padding: 14px 16px;
+  font-family: var(--pixel-title-font);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: var(--pixel-shadow);
+  transition: all 0.1s steps(2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* 메인 버튼: 화사하고 통통 튀는 썸머 옐로우 */
+.btn-primary {
+  background: var(--summer-yellow);
+  color: var(--ink);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--summer-yellow-light);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--pixel-shadow-lg);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.btn-primary:disabled {
+  background: #d4e2ea;
+  color: #7d93a4;
+  border-color: #8c9fae;
+  box-shadow: 2px 2px 0px #8c9fae;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 보조 버튼: 청량한 썸머 사이언/블루 */
+.btn-secondary {
+  background: var(--summer-blue-light);
+  color: var(--ink);
+}
+
+.btn-secondary:hover {
+  background: #dff4ff;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--pixel-shadow-lg);
+}
+
+.btn-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+/* ---------- 🧾 모바일 뱅킹 주간 전자 영수증 / 거래 명세서 ---------- */
+.statement-box {
+  background: var(--white);
+  border: 3.5px solid var(--pixel-border);
+  border-radius: 6px;
+  box-shadow: var(--pixel-shadow-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  background-image: linear-gradient(#ffffff 95%, #f4fdff 100%);
+}
+
+.statement-typewriter {
+  min-height: 40px;
+}
+
+.statement-line {
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.statement-line.line-header {
+  font-family: var(--pixel-title-font);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  margin-top: 14px;
+  color: var(--summer-blue-dark);
+  background: var(--summer-cyan-light);
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1.5px solid var(--pixel-border);
+  border-radius: 3px;
+}
+
+.statement-line.line-header:first-child {
+  margin-top: 0;
+}
+
+.statement-line.line-sub {
+  font-weight: 700;
+  border-top: 1.5px dashed #c0dce8;
+  padding-top: 6px;
+  margin-bottom: 4px;
+  color: var(--ink-soft);
+}
+
+.statement-line.line-total {
+  font-family: var(--pixel-title-font);
+  font-size: 0.85rem;
+  color: var(--ink);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 2.5px solid var(--pixel-border);
+  background: var(--summer-yellow-light);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.bonus-think {
+  background: #f4fcff;
+  border: 2px dashed var(--summer-blue);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.bonus-think-label {
+  font-family: var(--pixel-title-font);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--summer-blue);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.bonus-think p {
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+
+.bonus-think p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- 결과 배지 & 완료 화면 ---------- */
+.result-badge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, var(--summer-yellow-light) 0%, #fffadb 100%);
+  border: 3px solid var(--pixel-border);
+  box-shadow: var(--pixel-shadow);
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  animation: float-head 2s ease-in-out infinite alternate;
+}
+
+.result-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  filter: drop-shadow(2px 2px 0px var(--pixel-border));
+}
+
+.result-badge h2 {
+  font-family: var(--pixel-title-font);
+  font-size: 1rem;
+  color: var(--ink);
+  margin: 0;
+}
+
+.closing-verse {
+  margin-top: 24px;
+  background: var(--ink);
+  color: #ffffff;
+  border: 3.5px solid var(--pixel-border);
+  box-shadow: var(--pixel-shadow-lg);
+  border-radius: 6px;
+  padding: 22px 20px 20px;
+}
+
+.closing-verse .eyebrow {
+  background: var(--summer-yellow);
+  color: var(--ink) !important;
+}
+
+.closing-verse p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin: 12px 0 0;
+  color: var(--summer-yellow-light);
+}
+
+.closing-verse .closing-sub {
+  font-size: 0.88rem;
+  color: #e2e8f0;
+  line-height: 1.75;
+  margin-top: 14px;
+}
+
+/* 요약 디테일 블록 */
+.detail-block {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: #fbfdf9;
+  border: 2px solid var(--pixel-border);
+  border-radius: 4px;
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.detail-block .q {
+  font-family: var(--pixel-title-font);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--summer-cyan-light);
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1.5px solid var(--pixel-border);
+  border-radius: 2px;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.detail-block .a {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* 에러 메시지 */
+.error-msg {
+  color: #c91834;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  background: #ffe3e7;
+  border: 2px solid #c91834;
+  padding: 8px 12px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px #c91834;
+}
+
+/* 하단 안내 텍스트 & 링크 */
+.footer-note {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-top: 24px;
+  text-shadow: 1px 1px 0px #ffffff;
+}
+
+.footer-note a {
+  color: var(--ink);
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.footer-note a:hover {
+  color: var(--summer-blue-dark);
+}
+
+/* 반응형 모바일 최적화 */
+@media (max-width: 420px) {
+  .card {
+    padding: 20px 16px;
+  }
+  .masthead h1 {
+    font-size: 1.15rem;
+  }
+  .choice-btn {
+    padding: 12px 14px;
+    font-size: 0.88rem;
+  }
+  .btn-primary, .btn-secondary {
+    font-size: 0.78rem;
+    padding: 12px 10px;
+  }
+}
