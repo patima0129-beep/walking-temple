@@ -1,5 +1,11 @@
 // app.js — 학생용 "걸어 다니는 교회" 시뮬레이션 로직
 
+// 이 게임의 고유 식별자입니다. 매주 새 게임을 만들 때는 이 값을 새로 지어서
+// (예: "2026-w37-ladder") 겹치지 않게 해주세요. 겹치면 같은 아카이브로 합쳐집니다.
+const GAME_ID = "2026-w36-walking-temple";
+const GAME_TITLE = "걸어 다니는 교회";
+const GAME_CATEGORY = "설문형";
+
 const SCENES = [
   {
     id: "scene1",
@@ -467,14 +473,27 @@ function renderReview() {
     btn.disabled = true;
     btn.textContent = "제출 중...";
     try {
+      const devotedCount = state.scenarioAnswers.filter((a) => a.tag === "devoted").length;
+      const result = getResultType(devotedCount);
+      const ss1Text =
+        [...state.selfStudy1.checked, state.selfStudy1.other].filter(Boolean).join(", ") || "(작성 없음)";
+
+      const answers = [
+        ...state.scenarioAnswers.map((a) => ({ label: a.title, value: a.choiceText })),
+        { label: "셀프 스터디 ① 정리가 필요한 성전", value: ss1Text },
+        { label: "셀프 스터디 ② 예수님의 도우심이 필요한 연약함", value: state.selfStudy2 },
+      ];
+
       const res = await fetch("/api/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          gameId: GAME_ID,
+          gameTitle: GAME_TITLE,
+          category: GAME_CATEGORY,
           name: state.name,
-          scenarioAnswers: state.scenarioAnswers,
-          selfStudy1: state.selfStudy1,
-          selfStudy2: state.selfStudy2,
+          summary: result ? result.label : "",
+          answers,
         }),
       });
       const data = await res.json();

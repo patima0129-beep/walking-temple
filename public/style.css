@@ -706,6 +706,49 @@ textarea {
   font-weight: 700;
 }
 
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.game-card {
+  background: var(--white);
+  border: 3.5px solid var(--pixel-border);
+  border-radius: 6px;
+  box-shadow: var(--pixel-shadow-lg);
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.game-card:hover {
+  transform: translate(-2px, -2px);
+}
+
+.game-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.game-title {
+  font-family: var(--pixel-title-font);
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.game-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: rgba(30, 30, 30, 0.65);
+}
+
 table.submission-table {
   width: 100%;
   border-collapse: separate;
