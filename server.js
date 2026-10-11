@@ -27,7 +27,17 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
 app.use(express.json({ limit: "1mb" }));
-app.use(express.static(path.join(__dirname, "public")));
+// 매주 app.js를 바꿔 올리므로, html/js/css는 브라우저가 매번 서버에 "바뀌었는지" 확인하게 한다.
+// (안 바뀌었으면 304로 짧게 응답하니 느려지지 않음. 이미지는 평소처럼 캐시)
+app.use(
+  express.static(path.join(__dirname, "public"), {
+    setHeaders(res, filePath) {
+      if (/\.(html|js|css)$/.test(filePath)) {
+        res.setHeader("Cache-Control", "no-cache");
+      }
+    },
+  })
+);
 
 // ---------------------------------------------------------
 // 학생 제출 저장 (모든 게임 종류 공통)
