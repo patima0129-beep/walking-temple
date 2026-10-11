@@ -124,12 +124,10 @@ const GIF_LOADING_LINES = [
 ];
 
 // 프레임 모양: cols 1 = 세로 한 줄(1×4, 가로로 긴 칸), cols 2 = 두 칸씩 두 줄(2×2, 세로로 긴 칸)
-// style lovely = 물방울+스티커, film = 필름 구멍 뚫린 심플 스타일
+// 색깔(THEMES)은 어느 모양에나 똑같이 적용됨
 const FRAMES = [
-  { key: "strip-lovely", label: "1×4 러블리", cols: 1, style: "lovely" },
-  { key: "strip-film", label: "1×4 필름", cols: 1, style: "film" },
-  { key: "grid-lovely", label: "2×2 러블리", cols: 2, style: "lovely" },
-  { key: "grid-film", label: "2×2 필름", cols: 2, style: "film" },
+  { key: "strip", label: "1×4 세로", cols: 1 },
+  { key: "grid", label: "2×2", cols: 2 },
 ];
 
 // 레이아웃 기준값 (가로 600 기준, 저장할 때 배율을 곱해서 그림)
@@ -177,7 +175,7 @@ const state = {
   photo: {
     stills: [],
     bursts: [],
-    frame: "strip-lovely",
+    frame: "strip",
     theme: "strawberry",
     caption: "우리 가족 인생네컷",
     source: "",
@@ -492,7 +490,7 @@ function framePickerHtml() {
       ${FRAMES.map(
         (f) => `
         <button class="frame-opt${f.key === state.photo.frame ? " selected" : ""}" data-key="${f.key}">
-          <span class="frame-icon cols-${f.cols} style-${f.style}">${"<i></i>".repeat(4)}</span>
+          <span class="frame-icon cols-${f.cols}">${"<i></i>".repeat(4)}</span>
           <span>${f.label}</span>
         </button>`
       ).join("")}
@@ -769,60 +767,36 @@ function drawStrip(ctx, scale, frame, phase) {
   const t = currentTheme();
   const f = currentFrame();
   const L = getLayout(f);
-  const film = f.style === "film";
   ctx.save();
   ctx.scale(scale, scale);
 
-  // 배경: 러블리는 물방울 무늬, 필름은 양옆에 필름 구멍
+  // 배경 + 물방울 무늬
   ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, L.W, L.H);
-  if (film) {
-    ctx.fillStyle = t.key === "classic" ? "#f4f4f4" : "#ffffff";
-    for (let y = 14; y < L.H - 14; y += 30) {
-      roundRectPath(ctx, 8, y, 13, 17, 3);
+  ctx.fillStyle = t.dot;
+  for (let y = 18; y < L.H; y += 36) {
+    for (let x = (y / 36) % 2 ? 18 : 36; x < L.W; x += 36) {
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.fill();
-      roundRectPath(ctx, L.W - 21, y, 13, 17, 3);
-      ctx.fill();
-    }
-  } else {
-    ctx.fillStyle = t.dot;
-    for (let y = 18; y < L.H; y += 36) {
-      for (let x = (y / 36) % 2 ? 18 : 36; x < L.W; x += 36) {
-        ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
-        ctx.fill();
-      }
     }
   }
 
-  // 위쪽 작은 글씨 (필름은 깜빡이는 REC 표시)
+  // 위쪽 작은 글씨
   ctx.fillStyle = t.text;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.font = `700 ${f.cols === 2 ? 20 : 16}px Galmuri11, 'Apple SD Gothic Neo', sans-serif`;
-  if (film) {
-    const filmTitle = "FAMILY FILM  ·  4 CUTS";
-    ctx.fillText(filmTitle, L.W / 2, L.TOP / 2 + 2);
-    if (frame < 0 || Math.sin(phase * Math.PI * 4) > -0.3) {
-      ctx.fillStyle = "#ff4d4d";
-      ctx.beginPath();
-      ctx.arc(L.W / 2 - ctx.measureText(filmTitle).width / 2 - 14, L.TOP / 2 + 2, 6, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  } else {
-    ctx.fillText("♡  4 CUTS  ♡", L.W / 2, L.TOP / 2 + 2);
-  }
+  ctx.fillText("♡  4 CUTS  ♡", L.W / 2, L.TOP / 2 + 2);
 
   // 네 컷
   L.cells.forEach((cell, i) => {
     const { x, y, w, h } = cell;
-    if (!film) {
-      ctx.fillStyle = t.cell;
-      roundRectPath(ctx, x - 5, y - 5, w + 10, h + 10, 18);
-      ctx.fill();
-    }
+    ctx.fillStyle = t.cell;
+    roundRectPath(ctx, x - 5, y - 5, w + 10, h + 10, 18);
+    ctx.fill();
     ctx.save();
-    roundRectPath(ctx, x, y, w, h, film ? 4 : 14);
+    roundRectPath(ctx, x, y, w, h, 14);
     ctx.clip();
     let src = state.photo.stills[i];
     if (frame >= 0) {
@@ -833,37 +807,35 @@ function drawStrip(ctx, scale, frame, phase) {
     ctx.restore();
   });
 
-  if (!film) {
-    // 스티커 (움짤에서는 콩콩 뛰도록)
-    const stickerSpots = [
-      { cell: 0, x: 0.02, y: 0.04, r: -0.25 },
-      { cell: 1, x: 0.98, y: 0.06, r: 0.2 },
-      { cell: 2, x: 0.03, y: 0.96, r: 0.15 },
-      { cell: 3, x: 0.97, y: 0.94, r: -0.2 },
-    ];
-    stickerSpots.forEach((sp, i) => {
-      const cell = L.cells[sp.cell];
-      const bob = Math.sin((phase + i * 0.25) * Math.PI * 2);
-      ctx.save();
-      ctx.translate(cell.x + sp.x * cell.w, cell.y + sp.y * cell.h - bob * 4);
-      ctx.rotate(sp.r + bob * 0.08);
-      ctx.font = `${f.cols === 2 ? 46 : 54}px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif`;
-      ctx.fillText(t.stickers[i % t.stickers.length], 0, 0);
-      ctx.restore();
-    });
+  // 스티커 (움짤에서는 콩콩 뛰도록)
+  const stickerSpots = [
+    { cell: 0, x: 0.02, y: 0.04, r: -0.25 },
+    { cell: 1, x: 0.98, y: 0.06, r: 0.2 },
+    { cell: 2, x: 0.03, y: 0.96, r: 0.15 },
+    { cell: 3, x: 0.97, y: 0.94, r: -0.2 },
+  ];
+  stickerSpots.forEach((sp, i) => {
+    const cell = L.cells[sp.cell];
+    const bob = Math.sin((phase + i * 0.25) * Math.PI * 2);
+    ctx.save();
+    ctx.translate(cell.x + sp.x * cell.w, cell.y + sp.y * cell.h - bob * 4);
+    ctx.rotate(sp.r + bob * 0.08);
+    ctx.font = `${f.cols === 2 ? 46 : 54}px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif`;
+    ctx.fillText(t.stickers[i % t.stickers.length], 0, 0);
+    ctx.restore();
+  });
 
-    // 반짝이 (양옆 여백을 따라)
-    const count = f.cols === 2 ? 6 : 8;
-    for (let i = 0; i < count; i++) {
-      const x = i % 2 ? L.W - 14 : 14;
-      const y = L.TOP + 40 + ((L.H - L.TOP - L.BOTTOM - 80) * i) / (count - 1);
-      ctx.globalAlpha = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin((phase + i / count) * Math.PI * 2));
-      ctx.fillStyle = t.accent;
-      ctx.font = "700 20px sans-serif";
-      ctx.fillText("✦", x, y);
-    }
-    ctx.globalAlpha = 1;
+  // 반짝이 (양옆 여백을 따라)
+  const count = f.cols === 2 ? 6 : 8;
+  for (let i = 0; i < count; i++) {
+    const x = i % 2 ? L.W - 14 : 14;
+    const y = L.TOP + 40 + ((L.H - L.TOP - L.BOTTOM - 80) * i) / (count - 1);
+    ctx.globalAlpha = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin((phase + i / count) * Math.PI * 2));
+    ctx.fillStyle = t.accent;
+    ctx.font = "700 20px sans-serif";
+    ctx.fillText("✦", x, y);
   }
+  ctx.globalAlpha = 1;
 
   // 아래쪽: 복음팔찌 구슬 + 문구 + 날짜
   const baseY = L.H - L.BOTTOM;
